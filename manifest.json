@@ -9,5 +9,5 @@
       "js": ["borderify.js"]
     }
   ],
-  "web_accessible_resources": ["script.js", "rick_terryflaps.mp3"]
+  "web_accessible_resources": ["script.js", "sounds/*.mp3"]
 }
