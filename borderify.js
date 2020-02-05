@@ -1,4 +1,4 @@
-document.body.style.border = "5px solid red";
+//document.body.style.border = "5px solid red";
 var s = document.createElement("script");
 // TODO: add "script.js" to web_accessible_resources in manifest.json
 s.src = chrome.runtime.getURL("script.js");
