@@ -9,5 +9,7 @@
       "js": ["content.js"]
     }
   ],
-  "web_accessible_resources": ["script.js", "sounds/*.mp3"]
+  "permissions": ["*://app.slack.com/*"],
+  "web_accessible_resources": ["script.js", "sounds/*.mp3"],
+  "content_security_policy": "script-src 'self'; object-src 'self'"
 }

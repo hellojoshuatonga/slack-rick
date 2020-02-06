@@ -39,9 +39,11 @@ function getRickSound() {
 function createCallback(t, a) {
   const existingPlayer = document.getElementById("rick-player");
   if (existingPlayer) {
+    console.log("not playing");
     return;
   }
 
+  console.log("playing");
   const audio = document.createElement("audio");
   audio.id = "rick-player";
   audio.src = getRickSound();
@@ -51,7 +53,9 @@ function createCallback(t, a) {
     document.body.removeChild(audio);
   };
   document.body.appendChild(audio);
-  audio.play();
+  audio.play().catch(function() {
+    document.body.removeChild(audio);
+  });
 }
 
 setNotificationCallback(createCallback, () => null);
