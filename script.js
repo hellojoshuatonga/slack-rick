@@ -37,13 +37,6 @@ function getRickSound() {
 }
 
 function createCallback(t, a) {
-  //console.log("dsadsa", t, a);
-  //console.log("url", window.audioUrl);
-  //var audio = new Audio(window.audioUrl);
-  //var audio = new Audio(
-  //"http://dev-audio-test.s3-website-us-east-1.amazonaws.com/08xCf21_niXjQmGmanVUrR0Tk2h2mKSMw_sxg03CrycaxhNiqhX9_NFYhHBw7eJcp_ru52kdQRW88YigtmTE0w==.mp3"
-  //);
-  console.log("playing");
   const audio = document.createElement("audio");
   audio.id = "player";
   audio.src = getRickSound();
@@ -54,10 +47,6 @@ function createCallback(t, a) {
   };
   document.body.appendChild(audio);
   audio.play();
-  //const player = document.getElementById("player");
-  //player.play();
 }
 
-setNotificationCallback(createCallback, () => console.log("clicked"));
-
-//new window.Notification("dsadsa", { body: "dll" });
+setNotificationCallback(createCallback, () => null);
