@@ -37,8 +37,13 @@ function getRickSound() {
 }
 
 function createCallback(t, a) {
+  const existingPlayer = document.getElementById("rick-player");
+  if (existingPlayer) {
+    return;
+  }
+
   const audio = document.createElement("audio");
-  audio.id = "player";
+  audio.id = "rick-player";
   audio.src = getRickSound();
   audio.type = "audio/mpeg";
   audio.onended = function() {
