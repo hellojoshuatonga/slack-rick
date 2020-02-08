@@ -1,61 +1,66 @@
-function setNotificationCallback(createCallback, clickCallback) {
-  const OldNotify = window.Notification;
-  function newNotify(title, opt) {
-    createCallback(title, opt);
-    const instance = new OldNotify(title, opt);
-    instance.addEventListener("click", clickCallback);
-    return instance;
-  }
-  newNotify.requestPermission = OldNotify.requestPermission.bind(OldNotify);
-  Object.defineProperty(newNotify, "permission", {
-    get: () => OldNotify.permission
-  });
+const AUDIO_PLAYER_ID = "rick-player";
+const SOUNDS_BASE_URL =
+  "https://raw.githubusercontent.com/hellojoshuatonga/slack-rick/master/sounds/";
+const SOUNDS_LIST_URL = SOUNDS_BASE_URL + "list.txt";
+let soundNames = [];
 
-  window.Notification = newNotify;
-  //Notification = newNotify;
+function fetchRickTones() {
+  return fetch(SOUNDS_LIST_URL)
+    .then(result => result.text())
+    .then(rawTones => {
+      const tones = rawTones.split("\n");
+      // There's an empty new line so just pop it from the array
+      tones.pop();
+
+      soundNames = soundNames.concat(tones);
+    });
 }
 
-let sounds = [];
+fetchRickTones();
 
-fetch(
-  "https://raw.githubusercontent.com/hellojoshuatonga/slack-rick/master/sounds/list.txt"
-)
-  .then(r => r.text())
-  .then(result => {
-    const hell = result.split("\n");
-    hell.pop(); // there's an empty line
-
-    sounds = sounds.concat(hell);
-  });
-
-function getRickSound() {
-  const rick = sounds[Math.floor(Math.random() * sounds.length)];
-  return (
-    "https://raw.githubusercontent.com/hellojoshuatonga/slack-rick/master/sounds/" +
-    rick
-  );
+function getRandomRickTone() {
+  const selectedSoundName =
+    soundNames[Math.floor(Math.random() * soundNames.length)];
+  return SOUNDS_BASE_URL + selectedSoundName;
 }
 
-function createCallback(t, a) {
-  const existingPlayer = document.getElementById("rick-player");
+function rickTonePlayer() {
+  const existingPlayer = document.getElementById(AUDIO_PLAYER_ID);
   if (existingPlayer) {
-    console.log("not playing");
     return;
   }
 
-  console.log("playing");
   const audio = document.createElement("audio");
-  audio.id = "rick-player";
-  audio.src = getRickSound();
+  audio.id = AUDIO_PLAYER_ID;
+  audio.src = getRandomRickTone();
   audio.type = "audio/mpeg";
   audio.onended = function() {
-    console.log("audio ended");
     document.body.removeChild(audio);
   };
+
   document.body.appendChild(audio);
   audio.play().catch(function() {
     document.body.removeChild(audio);
   });
 }
 
-setNotificationCallback(createCallback, () => null);
+function addNotificationListener(fn) {
+  const OldNotification = window.Notification;
+
+  function NewNotification(title, opt) {
+    fn(title, opt);
+    const instance = new OldNotification(title, opt);
+    return instance;
+  }
+
+  NewNotification.requestPermission = OldNotification.requestPermission.bind(
+    OldNotification
+  );
+  Object.defineProperty(NewNotification, "permission", {
+    get: () => OldNotification.permission
+  });
+
+  window.Notification = NewNotification;
+}
+
+addNotificationListener(rickTonePlayer);

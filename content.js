@@ -1,9 +1,7 @@
-//document.body.style.border = "5px solid red";
-var s = document.createElement("script");
-// TODO: add "script.js" to web_accessible_resources in manifest.json
-s.src = chrome.runtime.getURL("script.js");
-s.onload = function() {
+const scriptEl = document.createElement("script");
+scriptEl.src = chrome.runtime.getURL("script.js");
+scriptEl.onload = function() {
   this.remove();
 };
 
-(document.head || document.documentElement).appendChild(s);
+(document.head || document.documentElement).appendChild(scriptEl);
